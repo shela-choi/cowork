@@ -42,41 +42,6 @@ export async function fetch1DepthItems(category = null) {
   return parse1DepthItems(data.results || []);
 }
 
-// 2 Depth 아이템 조회 (삭제 제외)
-export async function fetch2DepthItems(parent1DepthId = null) {
-  const filter = {
-    and: [
-      {
-        property: 'progress_status',
-        select: {
-          does_not_equal: '삭제'
-        }
-      }
-    ]
-  };
-
-  if (parent1DepthId) {
-    filter.and.push({
-      property: '1 Depth Parent',
-      relation: {
-        contains: parent1DepthId
-      }
-    });
-  }
-
-  const response = await fetch(`${API_BASE}/databases/${DB_2DEPTH}/query`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      filter,
-      sorts: [{ property: '순번 (ID)', direction: 'ascending' }]
-    })
-  });
-
-  const data = await response.json();
-  return parse2DepthItems(data.results || []);
-}
-
 // 모든 2 Depth 아이템 조회
 export async function fetchAll2DepthItems() {
   const response = await fetch(`${API_BASE}/databases/${DB_2DEPTH}/query`, {
@@ -127,23 +92,6 @@ export async function update2DepthStatus(pageId, newStatus) {
           select: {
             name: newStatus
           }
-        }
-      }
-    })
-  });
-
-  return response.json();
-}
-
-// 2 Depth Parent 변경 (아이템 이동)
-export async function move2DepthItem(pageId, newParentId) {
-  const response = await fetch(`${API_BASE}/pages/${pageId}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      properties: {
-        '1 Depth Parent': {
-          relation: [{ id: newParentId }]
         }
       }
     })

@@ -8,13 +8,11 @@
   --accent-blue: #4a90d9;
   --accent-blue-hover: #3a7bc8;
 
-  /* 상태 색상 */
+  /* 상태 색상 (목록 뷰 전용) */
   --status-complete: #38A3A5;
   --status-progress: #FFD166;
   --status-hold: #EF476F;
   --status-wait: #8c9099;
-  --status-idea: #9b59b6;
-  --status-review: #3498db;
 
   /* 간트 차트 색상 */
   --gantt-plan: #79A3B1;

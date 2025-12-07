@@ -171,27 +171,6 @@
   transform: scaleY(1.2);
 }
 
-/* 종속성 연결선 */
-.dependency-line {
-  position: absolute;
-  top: 50%;
-  height: 2px;
-  background: var(--gantt-dependency);
-  transform: translateY(-50%);
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.dependency-arrow {
-  color: var(--gantt-dependency);
-  font-size: 16px;
-  font-weight: bold;
-  position: absolute;
-  right: -2px;
-}
-
 /* 범례 */
 .gantt-legend {
   display: flex;

@@ -25,7 +25,7 @@ function BarChartView({ items2Depth, onItemClick }) {
 
     return items2Depth.filter(item => {
       const planStart = item.planStartDate;
-      if (!planStart) return true; // 계획 시작일이 없으면 포함
+      if (!planStart) return false; // 계획 시작일이 없으면 제외
 
       if (startDate && planStart < startDate) return false;
       if (endDate && planStart > endDate) return false;

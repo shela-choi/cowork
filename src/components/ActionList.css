@@ -99,12 +99,12 @@
 }
 
 .status-count.status-idea {
-  background-color: var(--status-idea);
+  background-color: #9b59b6;
   color: white;
 }
 
 .status-count.status-review {
-  background-color: var(--status-review);
+  background-color: #3498db;
   color: white;
 }
 
@@ -151,15 +151,15 @@
 }
 
 .status-select.status-idea {
-  background-color: var(--status-idea);
+  background-color: #9b59b6;
   color: white;
-  border-color: var(--status-idea);
+  border-color: #9b59b6;
 }
 
 .status-select.status-review {
-  background-color: var(--status-review);
+  background-color: #3498db;
   color: white;
-  border-color: var(--status-review);
+  border-color: #3498db;
 }
 
 /* 2 Depth 하위 아이템 */
