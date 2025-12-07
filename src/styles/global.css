@@ -1,0 +1,88 @@
+/* 라이트 베이지 테마 */
+:root {
+  --bg-primary: #f5f3f0;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #e8e4df;
+  --text-primary: #2d2d2d;
+  --text-secondary: #6b6b6b;
+  --accent-blue: #4a90d9;
+  --accent-blue-hover: #3a7bc8;
+
+  /* 상태 색상 */
+  --status-complete: #38A3A5;
+  --status-progress: #FFD166;
+  --status-hold: #EF476F;
+  --status-wait: #8c9099;
+  --status-idea: #9b59b6;
+  --status-review: #3498db;
+
+  /* 간트 차트 색상 */
+  --gantt-plan: #79A3B1;
+  --gantt-actual: #2B7A8B;
+  --gantt-dependency: #FF8C00;
+
+  /* 기타 */
+  --border-color: #d4d0cb;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+/* 스크롤바 스타일 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c5c0ba;
+}
+
+/* 버튼 기본 스타일 */
+button {
+  cursor: pointer;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* 입력 필드 기본 스타일 */
+input, select {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+}

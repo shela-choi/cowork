@@ -1,0 +1,283 @@
+.action-list {
+  padding: 16px 24px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+}
+
+.action-item-1depth {
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.item-header:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.item-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.expand-icon {
+  font-size: 10px;
+  color: var(--text-secondary);
+  transition: transform 0.2s ease;
+  width: 12px;
+}
+
+.expand-icon.expanded {
+  transform: rotate(90deg);
+}
+
+.item-number {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.item-title {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.item-category {
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+/* 상태별 count */
+.status-counts {
+  display: flex;
+  gap: 6px;
+  margin-left: 8px;
+}
+
+.status-count {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.status-count.status-complete {
+  background-color: var(--status-complete);
+  color: white;
+}
+
+.status-count.status-progress {
+  background-color: var(--status-progress);
+  color: #1a1a1a;
+}
+
+.status-count.status-hold {
+  background-color: var(--status-hold);
+  color: white;
+}
+
+.status-count.status-wait {
+  background-color: var(--status-wait);
+  color: white;
+}
+
+.status-count.status-idea {
+  background-color: var(--status-idea);
+  color: white;
+}
+
+.status-count.status-review {
+  background-color: var(--status-review);
+  color: white;
+}
+
+.item-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.child-count {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.status-select {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  min-width: 90px;
+}
+
+.status-select.status-complete {
+  background-color: var(--status-complete);
+  color: white;
+  border-color: var(--status-complete);
+}
+
+.status-select.status-progress {
+  background-color: var(--status-progress);
+  color: #1a1a1a;
+  border-color: var(--status-progress);
+}
+
+.status-select.status-hold {
+  background-color: var(--status-hold);
+  color: white;
+  border-color: var(--status-hold);
+}
+
+.status-select.status-wait {
+  background-color: var(--status-wait);
+  color: white;
+  border-color: var(--status-wait);
+}
+
+.status-select.status-idea {
+  background-color: var(--status-idea);
+  color: white;
+  border-color: var(--status-idea);
+}
+
+.status-select.status-review {
+  background-color: var(--status-review);
+  color: white;
+  border-color: var(--status-review);
+}
+
+/* 2 Depth 하위 아이템 */
+.child-items {
+  background-color: var(--bg-primary);
+  padding: 8px 20px 16px 44px;
+}
+
+.action-item-2depth {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: var(--bg-secondary);
+  border-radius: 6px;
+  margin-top: 8px;
+}
+
+.action-item-2depth .item-title {
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.assignees {
+  display: flex;
+  gap: 4px;
+}
+
+.assignee-tag {
+  background-color: var(--accent-blue);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+}
+
+.due-date {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+/* 툴바 */
+.action-toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.add-btn {
+  background-color: var(--accent-blue);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.add-btn:hover {
+  background-color: var(--accent-blue-hover);
+}
+
+.add-btn.secondary {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.add-btn.secondary:hover {
+  background-color: var(--border-color);
+}
+
+/* 아이콘 버튼 */
+.icon-btn {
+  background-color: transparent;
+  color: var(--text-secondary);
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 4px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* 빈 하위 아이템 */
+.empty-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.add-child-btn {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.add-child-btn:hover {
+  background-color: var(--border-color);
+}
+
+/* 2 Depth 클릭 가능 */
+.action-item-2depth {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.action-item-2depth:hover {
+  background-color: var(--bg-tertiary);
+}
