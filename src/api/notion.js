@@ -1,11 +1,13 @@
 // Notion API 연동 모듈
-// 로컬 프록시 서버를 통해 Notion API 호출
+// 로컬 또는 Vercel 프록시 서버를 통해 Notion API 호출
 
 const DB_1DEPTH = import.meta.env.VITE_NOTION_DB_1DEPTH;
 const DB_2DEPTH = import.meta.env.VITE_NOTION_DB_2DEPTH;
 
-// 프록시 서버 URL
-const API_BASE = 'http://localhost:3001/notion';
+// 프록시 서버 URL (로컬 개발 vs 배포 환경)
+const API_BASE = import.meta.env.DEV
+  ? 'http://localhost:3001/notion'
+  : '/api/notion';
 
 // 1 Depth 아이템 조회 (삭제 제외)
 export async function fetch1DepthItems(category = null) {
