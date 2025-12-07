@@ -13,10 +13,11 @@ export default async function handler(req, res) {
   const NOTION_API_KEY = process.env.NOTION_API_KEY;
   const NOTION_API_URL = 'https://api.notion.com/v1';
 
-  // URL 경로 추출 (/api/notion/databases/xxx -> /databases/xxx)
-  const { path } = req.query;
-  const notionPath = Array.isArray(path) ? '/' + path.join('/') : '/' + path;
+  // URL 경로 추출 (/api/notion?path=/databases/xxx -> /databases/xxx)
+  const notionPath = req.query.path || '';
   const url = `${NOTION_API_URL}${notionPath}`;
+
+  console.log('Notion API Request:', req.method, url);
 
   try {
     const response = await fetch(url, {
@@ -30,6 +31,7 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
+    console.log('Notion API Response:', response.status);
     res.status(response.status).json(data);
   } catch (error) {
     console.error('Notion API Error:', error);

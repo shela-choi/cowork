@@ -4,10 +4,19 @@
 const DB_1DEPTH = import.meta.env.VITE_NOTION_DB_1DEPTH;
 const DB_2DEPTH = import.meta.env.VITE_NOTION_DB_2DEPTH;
 
-// 프록시 서버 URL (로컬 개발 vs 배포 환경)
-const API_BASE = import.meta.env.DEV
-  ? 'http://localhost:3001/notion'
-  : '/api/notion';
+// 로컬 개발 환경 여부
+const IS_DEV = import.meta.env.DEV;
+
+// API URL 빌드 함수
+function buildApiUrl(notionPath) {
+  if (IS_DEV) {
+    // 로컬: http://localhost:3001/notion/databases/xxx
+    return `http://localhost:3001/notion${notionPath}`;
+  } else {
+    // Vercel: /api/notion?path=/databases/xxx
+    return `/api/notion?path=${encodeURIComponent(notionPath)}`;
+  }
+}
 
 // 1 Depth 아이템 조회 (삭제 제외)
 export async function fetch1DepthItems(category = null) {
@@ -31,7 +40,7 @@ export async function fetch1DepthItems(category = null) {
     });
   }
 
-  const response = await fetch(`${API_BASE}/databases/${DB_1DEPTH}/query`, {
+  const response = await fetch(buildApiUrl(`/databases/${DB_1DEPTH}/query`), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -46,7 +55,7 @@ export async function fetch1DepthItems(category = null) {
 
 // 모든 2 Depth 아이템 조회
 export async function fetchAll2DepthItems() {
-  const response = await fetch(`${API_BASE}/databases/${DB_2DEPTH}/query`, {
+  const response = await fetch(buildApiUrl(`/databases/${DB_2DEPTH}/query`), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -66,7 +75,7 @@ export async function fetchAll2DepthItems() {
 
 // 1 Depth 상태 업데이트
 export async function update1DepthStatus(pageId, newStatus) {
-  const response = await fetch(`${API_BASE}/pages/${pageId}`, {
+  const response = await fetch(buildApiUrl(`/pages/${pageId}`), {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -85,7 +94,7 @@ export async function update1DepthStatus(pageId, newStatus) {
 
 // 2 Depth 상태 업데이트
 export async function update2DepthStatus(pageId, newStatus) {
-  const response = await fetch(`${API_BASE}/pages/${pageId}`, {
+  const response = await fetch(buildApiUrl(`/pages/${pageId}`), {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -152,7 +161,7 @@ export const ASSIGNEES = ['상혁님', '광철님', '종옥님', '기타'];
 
 // 다음 순번 가져오기 (1 Depth)
 async function getNext1DepthNumber() {
-  const response = await fetch(`${API_BASE}/databases/${DB_1DEPTH}/query`, {
+  const response = await fetch(buildApiUrl(`/databases/${DB_1DEPTH}/query`), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -167,7 +176,7 @@ async function getNext1DepthNumber() {
 
 // 다음 순번 가져오기 (2 Depth)
 async function getNext2DepthNumber() {
-  const response = await fetch(`${API_BASE}/databases/${DB_2DEPTH}/query`, {
+  const response = await fetch(buildApiUrl(`/databases/${DB_2DEPTH}/query`), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -185,7 +194,7 @@ export async function create1DepthItem({ title, category, status = '대기' }) {
   // 순번 자동 생성
   const nextNumber = await getNext1DepthNumber();
 
-  const response = await fetch(`${API_BASE}/pages`, {
+  const response = await fetch(buildApiUrl(`/pages`), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -283,7 +292,7 @@ export async function create2DepthItem({
     };
   }
 
-  const response = await fetch(`${API_BASE}/pages`, {
+  const response = await fetch(buildApiUrl(`/pages`), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -319,7 +328,7 @@ export async function update1DepthItem(pageId, { title, category, status }) {
     };
   }
 
-  const response = await fetch(`${API_BASE}/pages/${pageId}`, {
+  const response = await fetch(buildApiUrl(`/pages/${pageId}`), {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ properties })
@@ -417,7 +426,7 @@ export async function update2DepthItem(pageId, {
       : { select: null };
   }
 
-  const response = await fetch(`${API_BASE}/pages/${pageId}`, {
+  const response = await fetch(buildApiUrl(`/pages/${pageId}`), {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ properties })
