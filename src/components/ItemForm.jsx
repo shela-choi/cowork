@@ -213,6 +213,9 @@ export function Form2Depth({ isOpen, onClose, onSuccess, editItem = null, items1
     // 진행일자에 따른 상태 자동 변경
     const finalStatus = getAutoStatus(actualStartDate, actualEndDate);
 
+    // 담당자 중 첫 번째 사람을 last_modified_by로 설정
+    const lastModifiedBy = 담당자.length > 0 ? 담당자[0] : null;
+
     setLoading(true);
     try {
       if (isEdit) {
@@ -227,7 +230,8 @@ export function Form2Depth({ isOpen, onClose, onSuccess, editItem = null, items1
           actualEndDate: actualEndDate || null,
           details,
           uniqueNotes,
-          precedentItem: precedentItem || null
+          precedentItem: precedentItem || null,
+          lastModifiedBy
         });
       } else {
         await create2DepthItem({
@@ -239,7 +243,8 @@ export function Form2Depth({ isOpen, onClose, onSuccess, editItem = null, items1
           planEndDate: planEndDate || null,
           details,
           uniqueNotes,
-          precedentItem: precedentItem || null
+          precedentItem: precedentItem || null,
+          lastModifiedBy
         });
       }
       onSuccess();

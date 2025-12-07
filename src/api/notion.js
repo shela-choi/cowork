@@ -218,7 +218,8 @@ export async function create2DepthItem({
   planEndDate = null,
   details = '',
   uniqueNotes = '',
-  precedentItem = null
+  precedentItem = null,
+  lastModifiedBy = null
 }) {
   // 순번 자동 생성
   const nextNumber = await getNext2DepthNumber();
@@ -271,6 +272,12 @@ export async function create2DepthItem({
   if (precedentItem) {
     properties['Precedent Item'] = {
       relation: [{ id: precedentItem }]
+    };
+  }
+
+  if (lastModifiedBy) {
+    properties['last_modified_by'] = {
+      select: { name: lastModifiedBy }
     };
   }
 
@@ -331,7 +338,8 @@ export async function update2DepthItem(pageId, {
   actualEndDate,
   details,
   uniqueNotes,
-  precedentItem
+  precedentItem,
+  lastModifiedBy
 }) {
   const properties = {};
 
@@ -399,6 +407,12 @@ export async function update2DepthItem(pageId, {
     properties['Precedent Item'] = precedentItem
       ? { relation: [{ id: precedentItem }] }
       : { relation: [] };
+  }
+
+  if (lastModifiedBy !== undefined) {
+    properties['last_modified_by'] = lastModifiedBy
+      ? { select: { name: lastModifiedBy } }
+      : { select: null };
   }
 
   const response = await fetch(`${API_BASE}/pages/${pageId}`, {

@@ -12,10 +12,7 @@ function Modal({ isOpen, onClose, title, children, hideHeader = false }) {
             <button className="modal-close" onClick={onClose}>×</button>
           </div>
         )}
-        {hideHeader && (
-          <button className="modal-close-float" onClick={onClose}>×</button>
-        )}
-        <div className={`modal-body ${hideHeader ? 'no-header' : ''}`}>
+        <div className="modal-body">
           {children}
         </div>
       </div>

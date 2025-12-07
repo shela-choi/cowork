@@ -29,6 +29,12 @@ function TabMenu({ activeCategory, onCategoryChange, activeView, onViewChange })
           목록
         </button>
         <button
+          className={`view-btn ${activeView === 'table' ? 'active' : ''}`}
+          onClick={() => onViewChange('table')}
+        >
+          테이블
+        </button>
+        <button
           className={`view-btn ${activeView === 'gantt' ? 'active' : ''}`}
           onClick={() => onViewChange('gantt')}
         >

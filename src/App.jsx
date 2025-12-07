@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import TabMenu from './components/TabMenu';
 import ActionList from './components/ActionList';
+import TableView from './components/TableView';
 import GanttChart from './components/GanttChart';
 import BarChartView from './components/BarChart';
 import { Form2Depth } from './components/ItemForm';
@@ -84,6 +85,13 @@ function App() {
                 items1Depth={items1Depth}
                 items2Depth={filtered2DepthItems}
                 onRefresh={handleRefresh}
+              />
+            )}
+            {activeView === 'table' && (
+              <TableView
+                items1Depth={items1Depth}
+                items2Depth={filtered2DepthItems}
+                onItemClick={(item) => setSelectedItem(item)}
               />
             )}
             {activeView === 'gantt' && (
