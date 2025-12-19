@@ -1,8 +1,57 @@
 import { useState, useMemo } from 'react';
 import './TableView.css';
 
-function TableView({ items1Depth, items2Depth, onItemClick }) {
+function TableView({ items1Depth, items2Depth, onItemClick, activeCategory }) {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+
+  // 필터 상태 (전체 탭에서만 사용)
+  const [filterAssignee, setFilterAssignee] = useState('');
+  const [filterDate, setFilterDate] = useState('');
+  const [filterStatuses, setFilterStatuses] = useState([]);
+  const [appliedFilters, setAppliedFilters] = useState({
+    assignee: '',
+    date: '',
+    statuses: []
+  });
+
+  // 담당자 목록
+  const assigneeOptions = ['상혁님', '광철님', '종옥님', '기타'];
+
+  // 진행상태 목록
+  const statusOptions = ['아이디어', '검토 중', '진행 중', '완료', '보류'];
+
+  // 전체 탭인지 확인
+  const isAllCategory = activeCategory === null;
+
+  // 진행상태 멀티 선택 핸들러
+  const handleStatusToggle = (status) => {
+    setFilterStatuses(prev =>
+      prev.includes(status)
+        ? prev.filter(s => s !== status)
+        : [...prev, status]
+    );
+  };
+
+  // 조회 버튼 핸들러
+  const handleSearch = () => {
+    setAppliedFilters({
+      assignee: filterAssignee,
+      date: filterDate,
+      statuses: [...filterStatuses]
+    });
+  };
+
+  // 초기화 버튼 핸들러
+  const handleReset = () => {
+    setFilterAssignee('');
+    setFilterDate('');
+    setFilterStatuses([]);
+    setAppliedFilters({
+      assignee: '',
+      date: '',
+      statuses: []
+    });
+  };
 
   // 테이블 컬럼 정의
   const columns = [
@@ -34,9 +83,53 @@ function TableView({ items1Depth, items2Depth, onItemClick }) {
     });
   }, [items1Depth, items2Depth]);
 
+  // 필터링된 데이터 (전체 탭에서만 필터 적용)
+  const filteredData = useMemo(() => {
+    if (!isAllCategory) return tableData;
+
+    return tableData.filter(item => {
+      // 담당자 필터: 담당자 배열에 포함되어 있는지 확인
+      if (appliedFilters.assignee) {
+        const assignees = Array.isArray(item.담당자) ? item.담당자 : [];
+        if (!assignees.includes(appliedFilters.assignee)) {
+          return false;
+        }
+      }
+
+      // 기준일자 필터: 계획시작일 <= 기준일자 <= 계획완료일
+      if (appliedFilters.date) {
+        const planStart = item.planStartDate || '';
+        const planEnd = item.planEndDate || '';
+
+        // 계획시작일과 계획완료일이 둘 다 없으면 제외
+        if (!planStart && !planEnd) {
+          return false;
+        }
+
+        // 기준일자가 계획 기간에 포함되는지 확인
+        const filterDateStr = appliedFilters.date;
+        const isAfterStart = !planStart || filterDateStr >= planStart;
+        const isBeforeEnd = !planEnd || filterDateStr <= planEnd;
+
+        if (!isAfterStart || !isBeforeEnd) {
+          return false;
+        }
+      }
+
+      // 진행상태 필터: 선택된 상태 중 하나에 해당하는지 확인
+      if (appliedFilters.statuses.length > 0) {
+        if (!appliedFilters.statuses.includes(item.progressStatus)) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }, [tableData, isAllCategory, appliedFilters]);
+
   // 정렬된 데이터
   const sortedData = useMemo(() => {
-    let sorted = [...tableData];
+    let sorted = [...filteredData];
 
     // 기본 정렬: 상위아이템 > 진행상태 > 계획시작일
     if (!sortConfig.key) {
@@ -73,7 +166,7 @@ function TableView({ items1Depth, items2Depth, onItemClick }) {
     }
 
     return sorted;
-  }, [tableData, sortConfig]);
+  }, [filteredData, sortConfig]);
 
   // 정렬 핸들러
   const handleSort = (key) => {
@@ -142,9 +235,76 @@ function TableView({ items1Depth, items2Depth, onItemClick }) {
 
   return (
     <div className="table-view">
+      {/* 필터 영역 - 전체 탭에서만 표시 */}
+      {isAllCategory && (
+        <div className="table-filter">
+          <div className="filter-row">
+            <div className="filter-item">
+              <label className="filter-label">담당자</label>
+              <select
+                className="filter-select"
+                value={filterAssignee}
+                onChange={(e) => setFilterAssignee(e.target.value)}
+              >
+                <option value="">전체</option>
+                {assigneeOptions.map(assignee => (
+                  <option key={assignee} value={assignee}>{assignee}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="filter-item">
+              <label className="filter-label">기준일자</label>
+              <input
+                type="date"
+                className="filter-date"
+                value={filterDate}
+                onChange={(e) => setFilterDate(e.target.value)}
+              />
+            </div>
+
+            <div className="filter-item filter-status">
+              <label className="filter-label">진행상태</label>
+              <div className="status-checkboxes">
+                {statusOptions.map(status => (
+                  <label key={status} className="status-checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={filterStatuses.includes(status)}
+                      onChange={() => handleStatusToggle(status)}
+                    />
+                    <span className={`status-checkbox-text ${filterStatuses.includes(status) ? 'checked' : ''}`}>
+                      {status}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="filter-buttons">
+              <button className="filter-search-btn" onClick={handleSearch}>
+                조회
+              </button>
+              <button className="filter-reset-btn" onClick={handleReset}>
+                초기화
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="table-toolbar">
         <div className="table-info">
           총 <strong>{sortedData.length}</strong>개 아이템
+          {isAllCategory && appliedFilters.assignee && (
+            <span className="filter-tag">담당자: {appliedFilters.assignee}</span>
+          )}
+          {isAllCategory && appliedFilters.date && (
+            <span className="filter-tag">기준일: {appliedFilters.date}</span>
+          )}
+          {isAllCategory && appliedFilters.statuses.length > 0 && (
+            <span className="filter-tag">상태: {appliedFilters.statuses.join(', ')}</span>
+          )}
         </div>
         <button className="export-btn" onClick={handleExportExcel}>
           Excel 내보내기

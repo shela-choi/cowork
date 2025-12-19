@@ -92,6 +92,7 @@ function App() {
                 items1Depth={items1Depth}
                 items2Depth={filtered2DepthItems}
                 onItemClick={(item) => setSelectedItem(item)}
+                activeCategory={activeCategory}
               />
             )}
             {activeView === 'gantt' && (

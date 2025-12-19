@@ -5,6 +5,138 @@
   background-color: var(--bg-primary);
 }
 
+/* 필터 영역 */
+.table-filter {
+  padding: 16px 20px;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.filter-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.filter-select,
+.filter-date {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 13px;
+  min-width: 120px;
+}
+
+.filter-select:focus,
+.filter-date:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+}
+
+.filter-status {
+  flex: 1;
+}
+
+.status-checkboxes {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.status-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.status-checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.status-checkbox-text {
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background-color: var(--bg-primary);
+  transition: all 0.2s;
+}
+
+.status-checkbox-text:hover {
+  border-color: var(--accent-blue);
+}
+
+.status-checkbox-text.checked {
+  background-color: var(--accent-blue);
+  border-color: var(--accent-blue);
+  color: white;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-search-btn {
+  padding: 8px 20px;
+  background-color: var(--accent-blue);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.filter-search-btn:hover {
+  background-color: var(--accent-blue-hover);
+}
+
+.filter-reset-btn {
+  padding: 8px 16px;
+  background-color: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-reset-btn:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.filter-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  background-color: var(--accent-blue);
+  color: white;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
 .table-toolbar {
   display: flex;
   justify-content: space-between;
