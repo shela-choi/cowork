@@ -45,7 +45,7 @@ export async function fetch1DepthItems(category = null) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       filter,
-      sorts: [{ property: '순번 (ID)', direction: 'ascending' }]
+      sorts: [{ property: '순번 (ID)', direction: 'descending' }]
     })
   });
 
@@ -145,17 +145,11 @@ function parse2DepthItems(results) {
   }));
 }
 
-// 카테고리 목록 (탭 메뉴 순서: 전체,기조실,실무총괄,기획실)
-export const CATEGORIES = ['기조실', '실무총괄', '기획실'];
-
 // 1 Depth 상태 목록
 export const STATUS_1DEPTH = ['대기', '진행', '완료', '보류', '삭제'];
 
 // 2 Depth 상태 목록
 export const STATUS_2DEPTH = ['아이디어', '검토 중', '진행 중', '완료', '보류', '삭제'];
-
-// 담당자 목록 (PRD 기준)
-export const ASSIGNEES = ['상혁님', '광철님', '종옥님', '기타'];
 
 // ==================== 생성 (CREATE) ====================
 

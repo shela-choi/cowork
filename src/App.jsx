@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import TabMenu from './components/TabMenu';
 import ActionList from './components/ActionList';
 import TableView from './components/TableView';
@@ -11,6 +11,7 @@ import './App.css';
 function App() {
   const [activeCategory, setActiveCategory] = useState(null);
   const [activeView, setActiveView] = useState('list');
+  const [allItems1Depth, setAllItems1Depth] = useState([]); // 전체 1depth 아이템 (카테고리 추출용)
   const [items1Depth, setItems1Depth] = useState([]);
   const [items2Depth, setItems2Depth] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,15 +19,31 @@ function App() {
   // 지연 아이템 상세 팝업
   const [selectedItem, setSelectedItem] = useState(null);
 
+  // 1Depth 아이템에서 고유한 카테고리 목록 추출
+  const categories = useMemo(() => {
+    const categorySet = new Set();
+    allItems1Depth.forEach(item => {
+      if (item.category) {
+        categorySet.add(item.category);
+      }
+    });
+    return Array.from(categorySet).sort();
+  }, [allItems1Depth]);
+
   const loadData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
       const [data1, data2] = await Promise.all([
-        fetch1DepthItems(activeCategory),
+        fetch1DepthItems(), // 전체 1Depth 가져오기 (카테고리 추출용)
         fetchAll2DepthItems()
       ]);
-      setItems1Depth(data1);
+      setAllItems1Depth(data1);
+      // 카테고리 필터링
+      const filtered1Depth = activeCategory
+        ? data1.filter(item => item.category === activeCategory)
+        : data1;
+      setItems1Depth(filtered1Depth);
       setItems2Depth(data2);
     } catch (err) {
       console.error('데이터 로드 실패:', err);
@@ -61,6 +78,7 @@ function App() {
       </header>
 
       <TabMenu
+        categories={categories}
         activeCategory={activeCategory}
         onCategoryChange={setActiveCategory}
         activeView={activeView}

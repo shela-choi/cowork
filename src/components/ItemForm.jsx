@@ -1,10 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Modal from './Modal';
 import {
-  CATEGORIES,
   STATUS_1DEPTH,
   STATUS_2DEPTH,
-  ASSIGNEES,
   create1DepthItem,
   create2DepthItem,
   update1DepthItem,
@@ -16,11 +14,22 @@ import {
 // 1 Depth 아이템 폼
 export function Form1Depth({ isOpen, onClose, onSuccess, editItem = null, items1Depth = [] }) {
   const [title, setTitle] = useState('');
-  const [category, setCategory] = useState(CATEGORIES[0]);
+  const [category, setCategory] = useState('');
   const [status, setStatus] = useState('대기');
   const [loading, setLoading] = useState(false);
 
   const isEdit = !!editItem;
+
+  // items1Depth에서 카테고리 목록 동적 추출
+  const categoryOptions = useMemo(() => {
+    const categorySet = new Set();
+    items1Depth.forEach(item => {
+      if (item.category) {
+        categorySet.add(item.category);
+      }
+    });
+    return Array.from(categorySet).sort();
+  }, [items1Depth]);
 
   useEffect(() => {
     if (editItem) {
@@ -29,10 +38,10 @@ export function Form1Depth({ isOpen, onClose, onSuccess, editItem = null, items1
       setStatus(editItem.status);
     } else {
       setTitle('');
-      setCategory(CATEGORIES[0]);
+      setCategory(categoryOptions[0] || '');
       setStatus('대기');
     }
-  }, [editItem, isOpen]);
+  }, [editItem, isOpen, categoryOptions]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -93,7 +102,7 @@ export function Form1Depth({ isOpen, onClose, onSuccess, editItem = null, items1
         <div className="form-group">
           <label>카테고리 *</label>
           <select value={category} onChange={e => setCategory(e.target.value)}>
-            {CATEGORIES.map(cat => (
+            {categoryOptions.map(cat => (
               <option key={cat} value={cat}>{cat}</option>
             ))}
           </select>
@@ -147,6 +156,12 @@ export function Form2Depth({ isOpen, onClose, onSuccess, editItem = null, items1
   const [loading, setLoading] = useState(false);
 
   const isEdit = !!editItem && editItem.id;
+
+  // 담당자 목록 (Notion DB와 일치)
+  const assigneeOptions = [
+    '김기영', '이대욱', '최종옥', '정상혁', '차민철',
+    '백원장', '최광철', '이정주', '이찬수', '기타'
+  ];
 
   useEffect(() => {
     if (editItem && editItem.id) {
@@ -323,23 +338,40 @@ export function Form2Depth({ isOpen, onClose, onSuccess, editItem = null, items1
         </div>
 
         <div className="form-group">
-          <label>담당자 (최대 3명)</label>
-          <div className="checkbox-group">
-            {ASSIGNEES.map(name => (
-              <label
-                key={name}
-                className={`checkbox-label ${담당자.includes(name) ? 'checked' : ''}`}
-              >
-                <input
-                  type="checkbox"
-                  checked={담당자.includes(name)}
-                  onChange={() => handleAssigneeToggle(name)}
-                  style={{ display: 'none' }}
-                />
-                {name}
-              </label>
-            ))}
-          </div>
+          <label>담당자</label>
+          <select
+            className="assignee-select"
+            value=""
+            onChange={(e) => {
+              if (e.target.value && !담당자.includes(e.target.value)) {
+                set담당자([...담당자, e.target.value]);
+              }
+              e.target.value = '';
+            }}
+          >
+            <option value="">선택하세요...</option>
+            {assigneeOptions
+              .filter(name => !담당자.includes(name))
+              .map(name => (
+                <option key={name} value={name}>{name}</option>
+              ))}
+          </select>
+          {담당자.length > 0 && (
+            <div className="selected-tags">
+              {담당자.map(name => (
+                <span key={name} className="selected-tag">
+                  {name}
+                  <button
+                    type="button"
+                    className="tag-remove"
+                    onClick={() => set담당자(담당자.filter(n => n !== name))}
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="form-group">
@@ -394,6 +426,7 @@ export function Form2Depth({ isOpen, onClose, onSuccess, editItem = null, items1
         <div className="form-group">
           <label>상세 내용</label>
           <textarea
+            className="large"
             value={details}
             onChange={e => setDetails(e.target.value)}
             placeholder="상세 내용을 입력하세요"

@@ -8,10 +8,12 @@ function TableView({ items1Depth, items2Depth, onItemClick, activeCategory }) {
   const [filterAssignee, setFilterAssignee] = useState('');
   const [filterDate, setFilterDate] = useState('');
   const [filterStatuses, setFilterStatuses] = useState([]);
+  const [filterParentItem, setFilterParentItem] = useState('');
   const [appliedFilters, setAppliedFilters] = useState({
     assignee: '',
     date: '',
-    statuses: []
+    statuses: [],
+    parentItem: ''
   });
 
   // 담당자 목록
@@ -37,7 +39,8 @@ function TableView({ items1Depth, items2Depth, onItemClick, activeCategory }) {
     setAppliedFilters({
       assignee: filterAssignee,
       date: filterDate,
-      statuses: [...filterStatuses]
+      statuses: [...filterStatuses],
+      parentItem: filterParentItem
     });
   };
 
@@ -46,10 +49,12 @@ function TableView({ items1Depth, items2Depth, onItemClick, activeCategory }) {
     setFilterAssignee('');
     setFilterDate('');
     setFilterStatuses([]);
+    setFilterParentItem('');
     setAppliedFilters({
       assignee: '',
       date: '',
-      statuses: []
+      statuses: [],
+      parentItem: ''
     });
   };
 
@@ -123,9 +128,17 @@ function TableView({ items1Depth, items2Depth, onItemClick, activeCategory }) {
         }
       }
 
+      // 상위아이템 필터: 선택된 상위아이템과 일치하는지 확인
+      if (appliedFilters.parentItem) {
+        const parent = items1Depth.find(p => p.id === item.parentId);
+        if (!parent || parent.id !== appliedFilters.parentItem) {
+          return false;
+        }
+      }
+
       return true;
     });
-  }, [tableData, isAllCategory, appliedFilters]);
+  }, [tableData, isAllCategory, appliedFilters, items1Depth]);
 
   // 정렬된 데이터
   const sortedData = useMemo(() => {
@@ -240,6 +253,20 @@ function TableView({ items1Depth, items2Depth, onItemClick, activeCategory }) {
         <div className="table-filter">
           <div className="filter-row">
             <div className="filter-item">
+              <label className="filter-label">상위아이템</label>
+              <select
+                className="filter-select"
+                value={filterParentItem}
+                onChange={(e) => setFilterParentItem(e.target.value)}
+              >
+                <option value="">전체</option>
+                {items1Depth.map(parent => (
+                  <option key={parent.id} value={parent.id}>{parent.title}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="filter-item">
               <label className="filter-label">담당자</label>
               <select
                 className="filter-select"
@@ -296,6 +323,9 @@ function TableView({ items1Depth, items2Depth, onItemClick, activeCategory }) {
       <div className="table-toolbar">
         <div className="table-info">
           총 <strong>{sortedData.length}</strong>개 아이템
+          {isAllCategory && appliedFilters.parentItem && (
+            <span className="filter-tag">상위아이템: {items1Depth.find(p => p.id === appliedFilters.parentItem)?.title}</span>
+          )}
           {isAllCategory && appliedFilters.assignee && (
             <span className="filter-tag">담당자: {appliedFilters.assignee}</span>
           )}

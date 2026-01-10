@@ -3,6 +3,62 @@
   overflow-x: auto;
 }
 
+/* 간트 필터 */
+.gantt-filter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.gantt-filter .filter-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gantt-filter .filter-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.gantt-filter .filter-select {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-size: 14px;
+  min-width: 200px;
+  cursor: pointer;
+}
+
+.gantt-filter .filter-select:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+}
+
+.gantt-filter .filter-reset-btn {
+  padding: 8px 16px;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.gantt-filter .filter-reset-btn:hover {
+  background-color: var(--border-color);
+}
+
 .gantt-header {
   display: flex;
   border-bottom: 2px solid var(--border-color);
@@ -332,4 +388,94 @@
   font-size: 14px;
   color: var(--gantt-dependency);
   padding: 8px 0;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .gantt-container {
+    padding: 12px 16px;
+  }
+
+  .gantt-filter {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .gantt-filter .filter-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .gantt-filter .filter-select {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .gantt-filter .filter-reset-btn {
+    width: 100%;
+  }
+
+  .gantt-label-col {
+    min-width: 150px;
+    max-width: 150px;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .gantt-timeline {
+    min-width: 500px;
+  }
+
+  .week-cell {
+    font-size: 10px;
+    padding: 8px 2px;
+  }
+
+  .parent-title {
+    font-size: 13px;
+  }
+
+  .child-title {
+    font-size: 12px;
+  }
+
+  .child-row .gantt-label-col {
+    padding-left: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .assignee-list {
+    margin-top: 4px;
+  }
+
+  .assignee-badge {
+    font-size: 9px;
+    padding: 1px 4px;
+  }
+
+  .gantt-legend {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .legend-item {
+    font-size: 11px;
+  }
+
+  .dependency-modal {
+    min-width: 280px;
+    max-width: 90%;
+    padding: 16px;
+  }
+
+  .dependency-modal h3 {
+    font-size: 16px;
+  }
+
+  .dependency-item-box {
+    padding: 12px;
+  }
 }

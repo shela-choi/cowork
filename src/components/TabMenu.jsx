@@ -1,7 +1,6 @@
-import { CATEGORIES } from '../api/notion';
 import './TabMenu.css';
 
-function TabMenu({ activeCategory, onCategoryChange, activeView, onViewChange }) {
+function TabMenu({ categories = [], activeCategory, onCategoryChange, activeView, onViewChange }) {
   return (
     <div className="tab-container">
       <div className="category-tabs">
@@ -11,7 +10,7 @@ function TabMenu({ activeCategory, onCategoryChange, activeView, onViewChange })
         >
           전체
         </button>
-        {CATEGORIES.map(category => (
+        {categories.map(category => (
           <button
             key={category}
             className={`tab-btn ${activeCategory === category ? 'active' : ''}`}

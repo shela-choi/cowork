@@ -16,7 +16,7 @@
   background-color: var(--bg-secondary);
   border-radius: 12px;
   width: 90%;
-  max-width: 500px;
+  max-width: 700px;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: var(--shadow);
@@ -91,35 +91,51 @@
 }
 
 .form-group textarea {
-  min-height: 80px;
+  min-height: 150px;
   resize: vertical;
 }
 
-/* 체크박스 그룹 */
-.checkbox-group {
+/* 상세내용 textarea 더 크게 */
+.form-group textarea.large {
+  min-height: 200px;
+}
+
+/* 담당자 드롭다운 + 태그 스타일 */
+.assignee-select {
+  margin-bottom: 8px;
+}
+
+.selected-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-top: 8px;
 }
 
-.checkbox-label {
-  display: flex;
+.selected-tag {
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
-  background-color: var(--bg-tertiary);
+  padding: 6px 10px;
+  background-color: var(--accent-blue);
+  color: white;
   border-radius: 16px;
-  cursor: pointer;
   font-size: 13px;
 }
 
-.checkbox-label input {
-  width: auto;
+.tag-remove {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.8;
 }
 
-.checkbox-label.checked {
-  background-color: var(--accent-blue);
-  color: white;
+.tag-remove:hover {
+  opacity: 1;
 }
 
 /* 버튼 그룹 */
@@ -192,4 +208,87 @@
 .form-group.half {
   flex: 1;
   margin-bottom: 0;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    max-width: none;
+    max-height: 95vh;
+    margin: 10px;
+  }
+
+  .modal-header {
+    padding: 16px;
+  }
+
+  .modal-header h2 {
+    font-size: 16px;
+  }
+
+  .modal-body {
+    padding: 16px;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-group label {
+    font-size: 13px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 16px; /* iOS 줌 방지 */
+    padding: 12px;
+  }
+
+  .form-group textarea {
+    min-height: 120px;
+  }
+
+  .form-group textarea.large {
+    min-height: 150px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .form-group.half {
+    margin-bottom: 16px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form-actions.top {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 12px 20px;
+  }
+
+  .form-actions.top .btn {
+    flex: 1;
+    min-width: 80px;
+  }
+
+  .selected-tags {
+    margin-top: 12px;
+  }
+
+  .selected-tag {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
 }

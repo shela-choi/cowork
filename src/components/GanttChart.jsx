@@ -7,6 +7,7 @@ const DAY_NAMES = ['일', '월', '화', '수', '목', '금', '토'];
 
 function GanttChart({ items1Depth, items2Depth }) {
   const [selectedDependency, setSelectedDependency] = useState(null);
+  const [filterParentItem, setFilterParentItem] = useState('');
   // 전체 기간 계산
   const { weeks, startDate, totalDays } = useMemo(() => {
     const allDates = [];
@@ -54,16 +55,52 @@ function GanttChart({ items1Depth, items2Depth }) {
     return (days / totalDays) * 100;
   };
 
+  // 필터링된 2Depth 아이템
+  const filtered2DepthItems = useMemo(() => {
+    if (!filterParentItem) return items2Depth;
+    return items2Depth.filter(item => item.parentId === filterParentItem);
+  }, [items2Depth, filterParentItem]);
+
   // 상위 아이템별로 하위 아이템 그룹핑
   const groupedItems = useMemo(() => {
-    return items1Depth.map(parent => ({
+    // 필터가 적용된 경우 해당 상위 아이템만 표시
+    const parentsToShow = filterParentItem
+      ? items1Depth.filter(p => p.id === filterParentItem)
+      : items1Depth;
+
+    return parentsToShow.map(parent => ({
       ...parent,
-      children: items2Depth.filter(child => child.parentId === parent.id)
+      children: filtered2DepthItems.filter(child => child.parentId === parent.id)
     }));
-  }, [items1Depth, items2Depth]);
+  }, [items1Depth, filtered2DepthItems, filterParentItem]);
 
   return (
     <div className="gantt-container">
+      {/* 필터 영역 */}
+      <div className="gantt-filter">
+        <div className="filter-item">
+          <label className="filter-label">상위아이템</label>
+          <select
+            className="filter-select"
+            value={filterParentItem}
+            onChange={(e) => setFilterParentItem(e.target.value)}
+          >
+            <option value="">전체</option>
+            {items1Depth.map(parent => (
+              <option key={parent.id} value={parent.id}>{parent.title}</option>
+            ))}
+          </select>
+        </div>
+        {filterParentItem && (
+          <button
+            className="filter-reset-btn"
+            onClick={() => setFilterParentItem('')}
+          >
+            초기화
+          </button>
+        )}
+      </div>
+
       {/* 헤더 - 주 단위 */}
       <div className="gantt-header">
         <div className="gantt-label-col">액션 아이템</div>
